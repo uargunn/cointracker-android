@@ -28,7 +28,7 @@ class CoinListViewModel @Inject constructor(
     val state: State<CoinListState> = _state
 
     init {
-        onSearch("coin")
+        onSearch("")
     }
 
     fun onSearch(query: String) {

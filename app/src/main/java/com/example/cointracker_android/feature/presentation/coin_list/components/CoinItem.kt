@@ -1,7 +1,9 @@
 package com.example.cointracker_android.feature.presentation.coin_list.components
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -13,13 +15,10 @@ import com.example.cointracker_android.feature.domain.model.Coin
 @Composable
 fun CoinItem(
     coin: Coin,
-    modifier: Modifier = Modifier,
-    cornerRadius: Dp = 10.dp,
-    onClick: () -> Unit
+    modifier: Modifier = Modifier
 ) {
     Box(
         modifier = modifier
-            .clickable { onClick() }
     ) {
         Column(
             modifier = Modifier

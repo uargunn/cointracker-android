@@ -23,8 +23,10 @@ class CoinRepositoryImpl(
         val coins = dao.getCoins(query)
 
         try {
-            val remoteCoins = api.getCoins()
-            dao.insertCoins(remoteCoins.map { coinMapper.map(it) })
+            if (coins.isEmpty()) {
+                val remoteCoins = api.getCoins()
+                dao.insertCoins(remoteCoins.map { coinMapper.map(it) })
+            }
         } catch (e: HttpException) {
             emit(
                 Resource.Error(
@@ -41,7 +43,6 @@ class CoinRepositoryImpl(
             )
         }
 
-        val newCoins = dao.getCoins(query)
-        emit(Resource.Success(data = newCoins))
+        emit(Resource.Success(data = dao.getCoins(query)))
     }
 }

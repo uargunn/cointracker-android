@@ -68,8 +68,8 @@ fun BottomNavigationItem(
     isSelected: Boolean,
     onClick: () -> Unit
 ) {
-    val background = if (isSelected) MaterialTheme.colors.primary.copy(alpha = 0.1f) else Color.Transparent
-    val contentColor = if (isSelected) MaterialTheme.colors.primary else MaterialTheme.colors.onBackground
+    val background = if (isSelected) MaterialTheme.colors.secondary.copy(alpha = 0.1f) else Color.Transparent
+    val contentColor = if (isSelected) MaterialTheme.colors.secondary else MaterialTheme.colors.onBackground
 
     Box(
         modifier = Modifier
@@ -96,7 +96,7 @@ fun BottomNavigationItem(
                 Text(
                     modifier = Modifier.padding(horizontal = 4.dp),
                     text = item.name,
-                    style = MaterialTheme.typography.h5,
+                    style = MaterialTheme.typography.h6,
                     fontWeight = FontWeight(500),
                     textAlign = TextAlign.Center,
                     color = contentColor
