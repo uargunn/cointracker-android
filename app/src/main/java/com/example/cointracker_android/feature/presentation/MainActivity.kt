@@ -13,6 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.cointracker_android.feature.presentation.coin_detail.CoinDetailScreen
 import com.example.cointracker_android.feature.presentation.coin_list.CoinListScreen
 import com.example.cointracker_android.feature.presentation.ui.theme.CointrackerandroidTheme
 import com.example.cointracker_android.feature.presentation.util.Screen
@@ -36,6 +37,10 @@ class MainActivity : ComponentActivity() {
                     ) {
                         composable(Screen.CoinListScreen.route) {
                             CoinListScreen(navController = navController)
+                        }
+
+                        composable(Screen.CoinDetailScreen.route) {
+                            CoinDetailScreen(navController = navController)
                         }
                     }
                 }
