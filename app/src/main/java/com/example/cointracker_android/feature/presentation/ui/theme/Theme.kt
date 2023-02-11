@@ -1,4 +1,4 @@
-package com.example.cointracker_android.ui.theme
+package com.example.cointracker_android.feature.presentation.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
