@@ -1,4 +1,4 @@
-package com.example.cointracker_android.ui.theme
+package com.example.cointracker_android.feature.presentation.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
@@ -7,15 +7,15 @@ import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 
 private val DarkColorPalette = darkColors(
-    primary = Purple200,
+    primary = GrassGreen,
     primaryVariant = Purple700,
-    secondary = Teal200
+    secondary = OceanBlue
 )
 
 private val LightColorPalette = lightColors(
-    primary = Purple500,
+    primary = GrassGreen,
     primaryVariant = Purple700,
-    secondary = Teal200
+    secondary = OceanBlue
 
     /* Other default colors to override
     background = Color.White,
