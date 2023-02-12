@@ -7,17 +7,18 @@ import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.cointracker_android.R
 import com.example.cointracker_android.feature.presentation.ui.common.FormTextField
 import com.example.cointracker_android.feature.presentation.ui.common.PrimaryButton
-import com.example.cointracker_android.feature.presentation.util.Screen
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun LoginScreen(
-    navController: NavController,
+    onNavToHomePage: () -> Unit,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
     val emailState = viewModel.email.value
@@ -34,7 +35,7 @@ fun LoginScreen(
                     )
                 }
                 is LoginViewModel.UiEvent.SignIn -> {
-                    navController.navigate(Screen.CoinListScreen.route)
+                    onNavToHomePage.invoke()
                 }
             }
         }
@@ -58,7 +59,7 @@ fun LoginScreen(
                     viewModel.onEvent(LoginEvent.ChangeEmailFocus(it))
                 },
                 isHintVisible = emailState.isHintVisible,
-                textStyle = MaterialTheme.typography.body1
+                textStyle = MaterialTheme.typography.body1,
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -73,16 +74,15 @@ fun LoginScreen(
                     viewModel.onEvent(LoginEvent.ChangePasswordFocus(it))
                 },
                 isHintVisible = passwordState.isHintVisible,
-                textStyle = MaterialTheme.typography.body1
+                textStyle = MaterialTheme.typography.body1,
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             PrimaryButton(
-                text = "Sign In",
+                text = stringResource(id = R.string.sign_up),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp)
                     .height(54.dp),
                 roundedCornerShape = 8,
                 onClick = {
@@ -90,5 +90,9 @@ fun LoginScreen(
                 }
             )
         }
+    }
+
+    LaunchedEffect(key1 = viewModel.hasUser) {
+        onNavToHomePage.invoke()
     }
 }

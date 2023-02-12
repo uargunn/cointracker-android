@@ -25,6 +25,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContent {
             CointrackerandroidTheme {
@@ -39,7 +40,15 @@ class MainActivity : ComponentActivity() {
                         startDestination = Screen.LoginScreen.route
                     ) {
                         composable(Screen.LoginScreen.route) {
-                            LoginScreen(navController = navController)
+                            LoginScreen(
+                                onNavToHomePage = {
+                                    navController.navigate(Screen.CoinListScreen.route) {
+                                        popUpTo(Screen.LoginScreen.route) {
+                                            inclusive = true
+                                        }
+                                    }
+                                }
+                            )
                         }
 
                         composable(Screen.CoinListScreen.route) {

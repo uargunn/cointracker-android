@@ -5,7 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cointracker_android.feature.domain.model.AuthException
-import com.example.cointracker_android.feature.domain.use_case.SignInWithEmail
+import com.example.cointracker_android.feature.domain.repository.AuthRepository
+import com.example.cointracker_android.feature.domain.use_case.auth.AuthUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -14,8 +15,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val signInWithEmail: SignInWithEmail
+    private val authUseCases: AuthUseCases
 ): ViewModel() {
+
+    val hasUser: Boolean
+        get() = authUseCases.getCurrentSession() != null
 
     private val _email = mutableStateOf(FormTextFieldState(
         hint = "Enter your email"
@@ -57,13 +61,13 @@ class LoginViewModel @Inject constructor(
             is LoginEvent.SignIn -> {
                 viewModelScope.launch {
                     try {
-                        val user = signInWithEmail.invoke(email.value.text, password.value.text)
-                        if (user != null) {
+                        val signInResult = authUseCases.signUpWithEmail(email.value.text, password.value.text)
+                        if (signInResult.user != null) {
                             _eventFlow.emit(UiEvent.SignIn)
                         } else {
                             _eventFlow.emit(UiEvent.ShowSnackbar(
-                                "Ops, please check your email/password"
-                            ))
+                                signInResult.message.orEmpty())
+                            )
                         }
                     } catch (exception: AuthException) {
                         _eventFlow.emit(UiEvent.ShowSnackbar(exception.message.orEmpty()))
@@ -72,7 +76,6 @@ class LoginViewModel @Inject constructor(
             }
         }
     }
-
     sealed class UiEvent {
         data class ShowSnackbar(val message: String) : UiEvent()
         object SignIn: UiEvent()
