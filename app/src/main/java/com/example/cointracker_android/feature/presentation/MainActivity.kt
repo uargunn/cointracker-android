@@ -17,6 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.cointracker_android.feature.presentation.coin_detail.CoinDetailScreen
 import com.example.cointracker_android.feature.presentation.coin_list.CoinListScreen
+import com.example.cointracker_android.feature.presentation.login.LoginScreen
 import com.example.cointracker_android.feature.presentation.ui.theme.CointrackerandroidTheme
 import com.example.cointracker_android.feature.presentation.util.Screen
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,8 +36,12 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     NavHost(
                         navController = navController,
-                        startDestination = Screen.CoinListScreen.route
+                        startDestination = Screen.LoginScreen.route
                     ) {
+                        composable(Screen.LoginScreen.route) {
+                            LoginScreen(navController = navController)
+                        }
+
                         composable(Screen.CoinListScreen.route) {
                             CoinListScreen(navController = navController)
                         }

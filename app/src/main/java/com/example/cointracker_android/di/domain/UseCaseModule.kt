@@ -4,6 +4,8 @@ import com.example.cointracker_android.feature.domain.repository.CoinRepository
 import com.example.cointracker_android.feature.domain.use_case.CoinUseCases
 import com.example.cointracker_android.feature.domain.use_case.GetCoinDetailById
 import com.example.cointracker_android.feature.domain.use_case.GetCoins
+import com.example.cointracker_android.feature.domain.use_case.SignInWithEmail
+import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,5 +23,11 @@ object UseCaseModule {
             getCoins = GetCoins(repository),
             getCoinDetailById = GetCoinDetailById(repository)
         )
+    }
+
+    @Provides
+    @Singleton
+    fun provideSignInWithEmailUseCase(auth: FirebaseAuth): SignInWithEmail {
+        return SignInWithEmail(auth)
     }
 }
