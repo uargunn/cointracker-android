@@ -4,6 +4,7 @@ import com.example.cointracker_android.feature.data.local.CoinDao
 import com.example.cointracker_android.feature.data.remote.CoinGeckoApi
 import com.example.cointracker_android.feature.domain.mapper.CoinMapper
 import com.example.cointracker_android.feature.domain.model.Coin
+import com.example.cointracker_android.feature.domain.model.CoinDetail
 import com.example.cointracker_android.feature.domain.repository.CoinRepository
 import com.example.cointracker_android.util.Resource
 import kotlinx.coroutines.flow.Flow
@@ -44,5 +45,34 @@ class CoinRepositoryImpl(
         }
 
         emit(Resource.Success(data = dao.getCoins(query)))
+    }
+
+    override fun getCoinDetailById(id: String): Flow<Resource<List<CoinDetail>>> = flow {
+        emit(Resource.Loading())
+
+        try {
+            val coinDetail = api.getCoinDetail(id)
+            emit(
+                Resource.Success(
+                    data = coinDetail.map {
+                        coinMapper.map(it)
+                    }
+                )
+            )
+        } catch (e: HttpException) {
+            emit(
+                Resource.Error(
+                    message = ":( Something went wrong!",
+                    data = null
+                )
+            )
+        } catch (e: IOException) {
+            emit(
+                Resource.Error(
+                    message = ":( Check your internet connection",
+                    data = null
+                )
+            )
+        }
     }
 }
