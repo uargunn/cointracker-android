@@ -10,9 +10,11 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.cointracker_android.feature.presentation.coin_detail.CoinDetailScreen
 import com.example.cointracker_android.feature.presentation.coin_list.CoinListScreen
 import com.example.cointracker_android.feature.presentation.ui.theme.CointrackerandroidTheme
@@ -39,7 +41,15 @@ class MainActivity : ComponentActivity() {
                             CoinListScreen(navController = navController)
                         }
 
-                        composable(Screen.CoinDetailScreen.route) {
+                        composable(
+                            route = Screen.CoinDetailScreen.route +
+                                    "?coinId={coinId}",
+                            arguments = listOf(
+                                navArgument(name = "coinId") {
+                                    type = NavType.StringType
+                                }
+                            )
+                        ) {
                             CoinDetailScreen(navController = navController)
                         }
                     }

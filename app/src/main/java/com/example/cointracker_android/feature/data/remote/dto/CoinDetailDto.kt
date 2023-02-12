@@ -14,7 +14,7 @@ data class CoinDetailDto(
     @SerializedName("current_price")
     var currentPrice : Double?,
     @SerializedName("market_cap")
-    var marketCap : Int?,
+    var marketCap : Double?,
     @SerializedName("market_cap_rank")
     var marketCapRank : String?,
     @SerializedName("fully_diluted_valuation")
@@ -30,13 +30,13 @@ data class CoinDetailDto(
     @SerializedName("price_change_percentage_24h")
     var priceChangePercentage24h : Double?,
     @SerializedName("market_cap_change_24h")
-    var marketCapChange24h : Int?,
+    var marketCapChange24h : Double?,
     @SerializedName("market_cap_change_percentage_24h")
-    var marketCapChangePercentage24h : Int?,
+    var marketCapChangePercentage24h : Double?,
     @SerializedName("circulating_supply")
-    var circulatingSupply : Int?,
+    var circulatingSupply : Double?,
     @SerializedName("total_supply")
-    var totalSupply : Int?,
+    var totalSupply : Double?,
     @SerializedName("max_supply")
     var maxSupply : String?,
     @SerializedName("ath")
@@ -51,8 +51,6 @@ data class CoinDetailDto(
     var atlChangePercentage : Double?,
     @SerializedName("atl_date")
     var atlDate : String?,
-    @SerializedName("roi")
-    var roi : String?,
     @SerializedName("last_updated")
     var lastUpdated : String?
 )

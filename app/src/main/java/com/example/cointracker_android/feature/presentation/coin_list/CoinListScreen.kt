@@ -5,9 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
@@ -23,7 +21,7 @@ import androidx.navigation.NavController
 import com.example.cointracker_android.feature.presentation.coin_list.components.CoinItem
 import com.example.cointracker_android.feature.presentation.coin_list.components.SearchBar
 import com.example.cointracker_android.feature.presentation.ui.common.navbar.BottomNavigationBar
-import com.example.cointracker_android.feature.presentation.ui.theme.GrassGreen
+import com.example.cointracker_android.feature.presentation.ui.theme.Primary
 import com.example.cointracker_android.feature.presentation.util.Screen
 
 @Composable
@@ -53,7 +51,7 @@ fun CoinListScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(100.dp)
-                        .background(GrassGreen),
+                        .background(Primary),
                     contentAlignment = Alignment.Center
                 ) {
                     // region SearchBar
@@ -97,7 +95,10 @@ fun CoinListScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable {
-
+                                    navController.navigate(
+                                        Screen.CoinDetailScreen.route +
+                                                "?coinId=${coin.id}"
+                                    )
                                 }
                         )
                     }

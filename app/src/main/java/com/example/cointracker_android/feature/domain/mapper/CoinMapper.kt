@@ -22,7 +22,7 @@ class CoinMapper {
             name = dto.name.orEmpty(),
             image = dto.image.orEmpty(),
             currentPrice = dto.currentPrice ?: 0.0,
-            marketCap = dto.marketCap.orZero(),
+            marketCap = dto.marketCap ?: 0.0,
             marketCapRank = dto.marketCapRank.orEmpty(),
             fullyDilutedValuation = dto.fullyDilutedValuation.orEmpty(),
             totalVolume = dto.totalVolume ?: 0.0,
@@ -30,10 +30,10 @@ class CoinMapper {
             low24h = dto.low24h ?: 0.0,
             priceChange24h = dto.priceChange24h ?: 0.0,
             priceChangePercentage24h = dto.priceChangePercentage24h ?: 0.0,
-            marketCapChange24h = dto.marketCapChange24h.orZero(),
-            marketCapChangePercentage24h = dto.marketCapChangePercentage24h.orZero(),
-            circulatingSupply = dto.circulatingSupply.orZero(),
-            totalSupply = dto.totalSupply.orZero(),
+            marketCapChange24h = dto.marketCapChange24h ?: 0.0,
+            marketCapChangePercentage24h = dto.marketCapChangePercentage24h ?: 0.0,
+            circulatingSupply = dto.circulatingSupply ?: 0.0,
+            totalSupply = dto.totalSupply ?: 0.0,
             maxSupply = dto.maxSupply.orEmpty(),
             ath = dto.ath ?: 0.0,
             athChangePercentage = dto.athChangePercentage ?: 0.0,
@@ -41,7 +41,6 @@ class CoinMapper {
             atl = dto.atl ?: 0.0,
             atlChangePercentage = dto.atlChangePercentage ?: 0.0,
             atlDate = dto.atlDate.orEmpty(),
-            roi = dto.roi.orEmpty(),
             lastUpdated = dto.lastUpdated.orEmpty()
         )
     }
