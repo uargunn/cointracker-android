@@ -17,6 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.cointracker_android.feature.presentation.coin_detail.CoinDetailScreen
 import com.example.cointracker_android.feature.presentation.coin_list.CoinListScreen
+import com.example.cointracker_android.feature.presentation.login.LoginScreen
 import com.example.cointracker_android.feature.presentation.ui.theme.CointrackerandroidTheme
 import com.example.cointracker_android.feature.presentation.util.Screen
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,6 +25,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContent {
             CointrackerandroidTheme {
@@ -35,8 +37,20 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     NavHost(
                         navController = navController,
-                        startDestination = Screen.CoinListScreen.route
+                        startDestination = Screen.LoginScreen.route
                     ) {
+                        composable(Screen.LoginScreen.route) {
+                            LoginScreen(
+                                onNavToHomePage = {
+                                    navController.navigate(Screen.CoinListScreen.route) {
+                                        popUpTo(Screen.LoginScreen.route) {
+                                            inclusive = true
+                                        }
+                                    }
+                                }
+                            )
+                        }
+
                         composable(Screen.CoinListScreen.route) {
                             CoinListScreen(navController = navController)
                         }

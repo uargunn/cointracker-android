@@ -14,7 +14,6 @@ class CoinMapper {
             id = dto.id.orEmpty()
         )
     }
-
     fun map(dto: CoinDetailDto): CoinDetail {
         return CoinDetail(
             id = dto.id.orEmpty(),

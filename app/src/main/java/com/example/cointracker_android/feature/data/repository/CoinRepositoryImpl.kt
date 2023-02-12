@@ -17,7 +17,6 @@ class CoinRepositoryImpl(
     private val dao: CoinDao,
     private val coinMapper: CoinMapper
 ) : CoinRepository {
-
     override fun getCoins(query: String): Flow<Resource<List<Coin>>> = flow {
         emit(Resource.Loading())
 
@@ -46,7 +45,6 @@ class CoinRepositoryImpl(
 
         emit(Resource.Success(data = dao.getCoins(query)))
     }
-
     override fun getCoinDetailById(id: String): Flow<Resource<List<CoinDetail>>> = flow {
         emit(Resource.Loading())
 
