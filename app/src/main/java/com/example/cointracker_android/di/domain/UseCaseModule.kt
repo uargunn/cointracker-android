@@ -8,6 +8,7 @@ import com.example.cointracker_android.feature.domain.use_case.coin.CoinUseCases
 import com.example.cointracker_android.feature.domain.use_case.coin.GetCoinDetailById
 import com.example.cointracker_android.feature.domain.use_case.coin.GetCoins
 import com.example.cointracker_android.feature.domain.use_case.auth.SignUpWithEmail
+import com.example.cointracker_android.feature.domain.use_case.coin.AddToFavorites
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,7 +23,8 @@ object UseCaseModule {
     fun provideCoinUseCases(repository: CoinRepository) : CoinUseCases {
         return CoinUseCases(
             getCoins = GetCoins(repository),
-            getCoinDetailById = GetCoinDetailById(repository)
+            getCoinDetailById = GetCoinDetailById(repository),
+            addToFavorites = AddToFavorites(repository)
         )
     }
     @Provides
@@ -30,7 +32,7 @@ object UseCaseModule {
     fun provideAuthUseCases(repository: AuthRepository) : AuthUseCases {
         return AuthUseCases(
             signUpWithEmail = SignUpWithEmail(repository),
-            getCurrentSession = GetCurrentSession(repository)
+            getCurrentSession = GetCurrentSession(repository),
         )
     }
 }

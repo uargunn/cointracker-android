@@ -8,6 +8,7 @@ import com.example.cointracker_android.feature.domain.mapper.CoinMapper
 import com.example.cointracker_android.feature.domain.repository.AuthRepository
 import com.example.cointracker_android.feature.domain.repository.CoinRepository
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,12 +23,16 @@ object RepositoryModule {
     fun provideCoinRepository(
         api: CoinGeckoApi,
         db: CoinDatabase,
-        coinMapper: CoinMapper
+        coinMapper: CoinMapper,
+        firestore: FirebaseFirestore,
+        auth: FirebaseAuth
     ): CoinRepository {
         return CoinRepositoryImpl(
             api = api,
             dao = db.coinDao,
-            coinMapper = coinMapper
+            coinMapper = coinMapper,
+            firestore = firestore,
+            auth = auth
         )
     }
     @Provides

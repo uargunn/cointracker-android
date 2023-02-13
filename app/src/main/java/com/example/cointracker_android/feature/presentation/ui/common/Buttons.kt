@@ -1,5 +1,6 @@
 package com.example.cointracker_android.feature.presentation.ui.common
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -24,6 +25,32 @@ fun PrimaryButton(
         colors = ButtonDefaults.buttonColors(
             backgroundColor = backgroundColor
         ),
+        onClick = {
+            onClick.invoke()
+        },
+        elevation = ButtonDefaults.elevation(4.dp)
+    ) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.button,
+            modifier = Modifier.padding(6.dp),
+            color = textColor
+        )
+    }
+}
+
+@Composable
+fun PrimaryOutlinedButton(
+    text: String,
+    modifier: Modifier = Modifier,
+    roundedCornerShape: Int = 50,
+    textColor: Color = Primary,
+    onClick: () -> Unit
+) {
+    OutlinedButton(
+        modifier = modifier,
+        shape = RoundedCornerShape(roundedCornerShape),
+        border = BorderStroke(2.dp, Primary),
         onClick = {
             onClick.invoke()
         },

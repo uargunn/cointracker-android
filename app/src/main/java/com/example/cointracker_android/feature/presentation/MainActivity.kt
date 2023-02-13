@@ -17,6 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.cointracker_android.feature.presentation.coin_detail.CoinDetailScreen
 import com.example.cointracker_android.feature.presentation.coin_list.CoinListScreen
+import com.example.cointracker_android.feature.presentation.favorite_list.FavoriteListScreen
 import com.example.cointracker_android.feature.presentation.login.LoginScreen
 import com.example.cointracker_android.feature.presentation.ui.theme.CointrackerandroidTheme
 import com.example.cointracker_android.feature.presentation.util.Screen
@@ -65,6 +66,10 @@ class MainActivity : ComponentActivity() {
                             )
                         ) {
                             CoinDetailScreen(navController = navController)
+                        }
+
+                        composable(Screen.FavoriteListScreen.route) {
+                            FavoriteListScreen(navController = navController)
                         }
                     }
                 }
