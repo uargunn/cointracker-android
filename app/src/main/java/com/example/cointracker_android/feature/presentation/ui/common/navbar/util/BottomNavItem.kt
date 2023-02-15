@@ -16,13 +16,7 @@ sealed class BottomNavItem(
 
     object Favorites : BottomNavItem(
         name = "Favorites",
-        route = "category_screen",
+        route = Screen.FavoriteListScreen.route,
         icon = R.drawable.ic_favorites
-    )
-
-    object Profile : BottomNavItem(
-        name = "Profile",
-        route = "profile_screen",
-        icon = R.drawable.ic_profile
     )
 }

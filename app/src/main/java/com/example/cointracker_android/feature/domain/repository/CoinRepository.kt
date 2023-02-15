@@ -10,4 +10,7 @@ interface CoinRepository {
 
     fun getCoinDetailById(id: String): Flow<Resource<List<CoinDetail>>>
 
+    suspend fun addToFavorites(coin: CoinDetail): Boolean
+
+    suspend fun getFavoriteCoins(): List<CoinDetail>?
 }

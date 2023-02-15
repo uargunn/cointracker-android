@@ -6,6 +6,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -17,9 +18,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.SubcomposeAsyncImage
 import com.example.cointracker_android.R
+import com.example.cointracker_android.feature.presentation.login.LoginEvent
+import com.example.cointracker_android.feature.presentation.login.LoginViewModel
+import com.example.cointracker_android.feature.presentation.ui.common.LoadingDialog
 import com.example.cointracker_android.feature.presentation.ui.common.PrimaryButton
+import com.example.cointracker_android.feature.presentation.ui.common.PrimaryOutlinedButton
 import com.example.cointracker_android.feature.presentation.ui.theme.Primary
 import com.example.cointracker_android.feature.presentation.ui.theme.White
+import com.example.cointracker_android.feature.presentation.util.Screen
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun CoinDetailScreen(
@@ -27,8 +34,32 @@ fun CoinDetailScreen(
     viewModel: CoinDetailViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.value
+    val scaffoldState = rememberScaffoldState()
 
-    Scaffold {
+    LaunchedEffect(key1 = true) {
+        viewModel.eventFlow.collectLatest {  event ->
+            when (event) {
+                is CoinDetailViewModel.UiEvent.ShowSnackbar -> {
+                    val result = scaffoldState.snackbarHostState.showSnackbar(
+                        message = event.message,
+                        actionLabel = "Okay"
+                    )
+                    if(result == SnackbarResult.ActionPerformed) {
+                        navController.navigate(Screen.FavoriteListScreen.route)
+                    }
+                }
+            }
+        }
+    }
+
+    // loading progress helper
+    if (viewModel.loadingProgressState.value) {
+        LoadingDialog()
+    }
+
+    Scaffold(
+        scaffoldState = scaffoldState
+    ) {
         Box(modifier = Modifier.fillMaxSize()) {
             state.coinDetail?.let { coinInfo ->
                 Column(modifier = Modifier.fillMaxWidth()) {
@@ -149,6 +180,19 @@ fun CoinDetailScreen(
                         roundedCornerShape = 8,
                         onClick = {
 
+                        }
+                    )
+
+                    PrimaryOutlinedButton(
+                        text = stringResource(id = R.string.add_to_favorite),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                            .height(54.dp)
+                            .offset(y = 80.dp),
+                        roundedCornerShape = 8,
+                        onClick = {
+                            viewModel.onEvent(CoinDetailEvent.AddToFavorite)
                         }
                     )
                 }

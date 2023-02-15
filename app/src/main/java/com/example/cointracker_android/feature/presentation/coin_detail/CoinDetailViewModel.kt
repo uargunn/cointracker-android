@@ -8,8 +8,11 @@ import androidx.lifecycle.viewModelScope
 import com.example.cointracker_android.feature.domain.use_case.coin.CoinUseCases
 import com.example.cointracker_android.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -17,11 +20,34 @@ class CoinDetailViewModel @Inject constructor(
     private val coinUseCases: CoinUseCases,
     private val savedStateHandle: SavedStateHandle,
 ): ViewModel() {
+
     private val _state = mutableStateOf(CoinDetailState())
     val state: State<CoinDetailState> = _state
+
+    private val _loadingProgressState = mutableStateOf(false)
+    val loadingProgressState: State<Boolean> = _loadingProgressState
+
+    private val _eventFlow = MutableSharedFlow<UiEvent>()
+    val eventFlow = _eventFlow.asSharedFlow()
+
     init {
         savedStateHandle.get<String>("coinId")?.let {
             getCoinDetailById(it)
+        }
+    }
+
+    fun onEvent(event: CoinDetailEvent) {
+        when (event) {
+            is CoinDetailEvent.AddToFavorite -> {
+                _loadingProgressState.value = true
+                viewModelScope.launch {
+                    val isSuccess  = coinUseCases.addToFavorites(state.value.coinDetail!!)
+                    if (isSuccess) {
+                        _eventFlow.emit(UiEvent.ShowSnackbar("Added to Your Favorites"))
+                    }
+                    _loadingProgressState.value = false
+                }
+            }
         }
     }
 
@@ -54,7 +80,7 @@ class CoinDetailViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun onEvent() {
-
+    sealed class UiEvent {
+        data class ShowSnackbar(val message: String) : UiEvent()
     }
 }

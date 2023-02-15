@@ -93,6 +93,8 @@ fun LoginScreen(
     }
 
     LaunchedEffect(key1 = viewModel.hasUser) {
-        onNavToHomePage.invoke()
+        if (viewModel.hasUser) {
+            onNavToHomePage.invoke()
+        }
     }
 }
