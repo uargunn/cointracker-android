@@ -28,8 +28,7 @@ fun BottomNavigationBar(
 ) {
     val items = listOf(
         BottomNavItem.Coins,
-        BottomNavItem.Favorites,
-        BottomNavItem.Profile
+        BottomNavItem.Favorites
     )
 
     Card(

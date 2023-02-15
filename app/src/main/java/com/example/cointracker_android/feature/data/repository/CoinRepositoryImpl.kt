@@ -5,8 +5,8 @@ import com.example.cointracker_android.feature.data.remote.CoinGeckoApi
 import com.example.cointracker_android.feature.domain.mapper.CoinMapper
 import com.example.cointracker_android.feature.domain.model.Coin
 import com.example.cointracker_android.feature.domain.model.CoinDetail
-import com.example.cointracker_android.feature.domain.model.FirebaseAuthResult
 import com.example.cointracker_android.feature.domain.repository.CoinRepository
+import com.example.cointracker_android.util.Constants
 import com.example.cointracker_android.util.Resource
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -84,13 +84,35 @@ class CoinRepositoryImpl(
     override suspend fun addToFavorites(coin: CoinDetail) : Boolean {
         return suspendCancellableCoroutine { continuation ->
             val userId = auth.currentUser?.uid.orEmpty()
-            firestore.collection("Users")
+            firestore
+                .collection(Constants.Firebase.COLLECTION_USERS)
                 .document(userId)
-                .collection("Favorites")
+                .collection(Constants.Firebase.COLLECTION_FAVORITES)
                 .document(coin.id)
                 .set(coin)
                 .addOnCompleteListener { task ->
                     continuation.resume(task.isSuccessful)
+                }
+        }
+    }
+
+    override suspend fun getFavoriteCoins() : List<CoinDetail>? {
+        return suspendCancellableCoroutine { continuation ->
+            val userId = auth.currentUser?.uid.orEmpty()
+            firestore
+                .collection(Constants.Firebase.COLLECTION_USERS)
+                .document(userId)
+                .collection(Constants.Firebase.COLLECTION_FAVORITES)
+                .addSnapshotListener { value, _ ->
+                    if (value != null && value.isEmpty.not()) {
+                        val documents = value.documents.mapNotNull {
+                            it.toObject(CoinDetail::class.java)
+                        }
+                        if (continuation.isActive)
+                            continuation.resume(documents)
+                    } else {
+                        continuation.resume(null)
+                    }
                 }
         }
     }

@@ -1,11 +1,24 @@
 package com.example.cointracker_android.feature.presentation.favorite_list
 
-import androidx.compose.material.Scaffold
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Outline
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.cointracker_android.feature.presentation.favorite_list.component.FavoriteCoinItem
 import com.example.cointracker_android.feature.presentation.ui.common.navbar.BottomNavigationBar
+import com.example.cointracker_android.feature.presentation.ui.theme.White
 import com.example.cointracker_android.feature.presentation.util.Screen
 
 @Composable
@@ -13,6 +26,7 @@ fun FavoriteListScreen(
     navController: NavController,
     viewModel: FavoriteListViewModel = hiltViewModel()
 ) {
+    val state = viewModel.state.value
     val scaffoldState = rememberScaffoldState()
 
     Scaffold(
@@ -26,6 +40,58 @@ fun FavoriteListScreen(
             )
         },
     ) {
+        Box(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            // region CoinList
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth(),
+                contentPadding = PaddingValues(
+                    horizontal = 16.dp,
+                    vertical = 8.dp
+                )
+            ) {
+                item {
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
 
+                items(state.coins) { coin ->
+                    FavoriteCoinItem(
+                        coin = coin,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp)
+                            .shadow(2.dp, RoundedCornerShape(8.dp))
+                            .background(White, RoundedCornerShape(8.dp))
+                            .clickable {
+                                navController.navigate(
+                                    Screen.CoinDetailScreen.route +
+                                            "?coinId=${coin?.id.orEmpty()}"
+                                )
+                            }
+                    )
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(80.dp))
+                }
+            }
+            // endregion
+
+            if (state.isLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+
+            if (state.errMessage.isNotBlank()) {
+                Text(
+                    text = state.errMessage,
+                    style = MaterialTheme.typography.h6,
+                    color = Color.Red,
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+        }
     }
 }
