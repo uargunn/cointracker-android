@@ -10,6 +10,7 @@ import com.example.cointracker_android.util.Constants
 import com.example.cointracker_android.util.Resource
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -103,13 +104,31 @@ class CoinRepositoryImpl(
                 .collection(Constants.Firebase.COLLECTION_USERS)
                 .document(userId)
                 .collection(Constants.Firebase.COLLECTION_FAVORITES)
-                .addSnapshotListener { value, _ ->
-                    if (value != null && value.isEmpty.not()) {
-                        val documents = value.documents.mapNotNull {
-                            it.toObject(CoinDetail::class.java)
-                        }
-                        if (continuation.isActive)
-                            continuation.resume(documents)
+                .get()
+                .addOnSuccessListener { snapshot ->
+                    val documents = snapshot.documents.mapNotNull {
+                        it.toObject(CoinDetail::class.java)
+                    }
+                    continuation.resume(documents)
+                }
+                .addOnFailureListener {
+                    continuation.resume(null)
+                }
+        }
+    }
+
+    override suspend fun removeFavoriteCoin(coinId: String): String? {
+        return suspendCancellableCoroutine { continuation ->
+            val userId = auth.currentUser?.uid.orEmpty()
+            firestore
+                .collection(Constants.Firebase.COLLECTION_USERS)
+                .document(userId)
+                .collection(Constants.Firebase.COLLECTION_FAVORITES)
+                .document(coinId)
+                .delete()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        continuation.resume("Removed from your favorites.")
                     } else {
                         continuation.resume(null)
                     }

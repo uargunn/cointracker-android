@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -17,9 +18,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.cointracker_android.feature.presentation.favorite_list.component.FavoriteCoinItem
+import com.example.cointracker_android.feature.presentation.ui.common.LoadingDialog
 import com.example.cointracker_android.feature.presentation.ui.common.navbar.BottomNavigationBar
 import com.example.cointracker_android.feature.presentation.ui.theme.White
 import com.example.cointracker_android.feature.presentation.util.Screen
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun FavoriteListScreen(
@@ -28,6 +31,19 @@ fun FavoriteListScreen(
 ) {
     val state = viewModel.state.value
     val scaffoldState = rememberScaffoldState()
+
+    LaunchedEffect(true) {
+        viewModel.eventFlow.collectLatest { event ->
+            when (event) {
+                is FavoriteListViewModel.UiEvent.ShowSnackbar -> {
+                    scaffoldState.snackbarHostState.showSnackbar(event.message)
+                }
+            }
+        }
+    }
+
+    if (viewModel.loadingProgressState.value)
+        LoadingDialog()
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -62,13 +78,16 @@ fun FavoriteListScreen(
                             .fillMaxWidth()
                             .padding(vertical = 8.dp)
                             .shadow(2.dp, RoundedCornerShape(8.dp))
-                            .background(White, RoundedCornerShape(8.dp))
-                            .clickable {
-                                navController.navigate(
-                                    Screen.CoinDetailScreen.route +
-                                            "?coinId=${coin?.id.orEmpty()}"
-                                )
-                            }
+                            .background(White, RoundedCornerShape(8.dp)),
+                        onItemClick = {
+                            navController.navigate(
+                                Screen.CoinDetailScreen.route +
+                                        "?coinId=${coin?.id.orEmpty()}"
+                            )
+                        },
+                        onDeleteClick = {
+                            viewModel.removeFavoriteCoin(coinId = coin?.id.orEmpty())
+                        }
                     )
                 }
 

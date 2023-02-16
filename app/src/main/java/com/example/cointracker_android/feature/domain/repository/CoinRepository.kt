@@ -13,4 +13,6 @@ interface CoinRepository {
     suspend fun addToFavorites(coin: CoinDetail): Boolean
 
     suspend fun getFavoriteCoins(): List<CoinDetail>?
+
+    suspend fun removeFavoriteCoin(coinId: String): String?
 }
