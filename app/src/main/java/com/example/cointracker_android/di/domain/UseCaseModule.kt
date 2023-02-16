@@ -22,7 +22,8 @@ object UseCaseModule {
             getCoins = GetCoins(repository),
             getCoinDetailById = GetCoinDetailById(repository),
             addToFavorites = AddToFavorites(repository),
-            getFavoriteCoins = GetFavoriteCoins(repository)
+            getFavoriteCoins = GetFavoriteCoins(repository),
+            removeFavoriteCoin = RemoveFavoriteCoin(repository)
         )
     }
     @Provides
