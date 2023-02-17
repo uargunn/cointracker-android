@@ -7,6 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,23 +19,23 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.SubcomposeAsyncImage
 import com.example.cointracker_android.R
-import com.example.cointracker_android.feature.presentation.login.LoginEvent
-import com.example.cointracker_android.feature.presentation.login.LoginViewModel
 import com.example.cointracker_android.feature.presentation.ui.common.LoadingDialog
 import com.example.cointracker_android.feature.presentation.ui.common.PrimaryButton
 import com.example.cointracker_android.feature.presentation.ui.common.PrimaryOutlinedButton
 import com.example.cointracker_android.feature.presentation.ui.theme.Primary
 import com.example.cointracker_android.feature.presentation.ui.theme.White
 import com.example.cointracker_android.feature.presentation.util.Screen
+import com.example.cointracker_android.feature.worker.PriceTrackingWorker.Companion.KEY_COIN_PRICE
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun CoinDetailScreen(
     navController: NavController,
-    viewModel: CoinDetailViewModel = hiltViewModel()
+    viewModel: CoinDetailViewModel = hiltViewModel(),
 ) {
     val state = viewModel.state.value
     val scaffoldState = rememberScaffoldState()
+    val priceState = viewModel.curPrice.value
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest {  event ->
@@ -55,6 +56,18 @@ fun CoinDetailScreen(
     // loading progress helper
     if (viewModel.loadingProgressState.value) {
         LoadingDialog()
+    }
+
+    val workInfos = viewModel.outputWorkInfoItems.observeAsState()
+    LaunchedEffect(key1 = workInfos.value) {
+        workInfos.value?.let {
+            if (it.isEmpty())
+                return@let
+            val price = it[0].outputData.getDouble(KEY_COIN_PRICE, -1.0)
+            if (price != -1.0) {
+                viewModel.onEvent(CoinDetailEvent.UpdatePrice(price))
+            }
+        }
     }
 
     Scaffold(
@@ -114,7 +127,7 @@ fun CoinDetailScreen(
                                         color = Color.DarkGray
                                     )
                                     Text(
-                                        text = coinInfo.currentPrice.toString(),
+                                        text = priceState.toString(),
                                         style = MaterialTheme.typography.body1,
                                         textAlign = TextAlign.End,
                                         modifier = Modifier.weight(1f),
@@ -171,7 +184,7 @@ fun CoinDetailScreen(
                     }
 
                     PrimaryButton(
-                        text = "Set Your Time",
+                        text = "Set Price Alert",
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(16.dp)
@@ -179,7 +192,7 @@ fun CoinDetailScreen(
                             .offset(y = 80.dp),
                         roundedCornerShape = 8,
                         onClick = {
-
+                            viewModel.onEvent(CoinDetailEvent.AddPriceTracker)
                         }
                     )
 
@@ -207,4 +220,5 @@ fun CoinDetailScreen(
             // endregion
         }
     }
+
 }

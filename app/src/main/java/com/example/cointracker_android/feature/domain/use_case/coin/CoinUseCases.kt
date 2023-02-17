@@ -5,5 +5,6 @@ data class CoinUseCases(
     val getCoinDetailById: GetCoinDetailById,
     val addToFavorites: AddToFavorites,
     val getFavoriteCoins: GetFavoriteCoins,
-    val removeFavoriteCoin: RemoveFavoriteCoin
+    val removeFavoriteCoin: RemoveFavoriteCoin,
+    val getCurrentPrice: GetCurrentPrice,
 )

@@ -135,4 +135,9 @@ class CoinRepositoryImpl(
                 }
         }
     }
+
+    override suspend fun getCurrentPrice(coinId: String): Double? {
+        val apiResult = api.getCoinDetail(coinId)
+        return apiResult.firstOrNull()?.currentPrice
+    }
 }

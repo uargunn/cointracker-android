@@ -15,6 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.work.WorkManager
 import com.example.cointracker_android.feature.presentation.coin_detail.CoinDetailScreen
 import com.example.cointracker_android.feature.presentation.coin_list.CoinListScreen
 import com.example.cointracker_android.feature.presentation.favorite_list.FavoriteListScreen
@@ -22,11 +23,12 @@ import com.example.cointracker_android.feature.presentation.login.LoginScreen
 import com.example.cointracker_android.feature.presentation.ui.theme.CointrackerandroidTheme
 import com.example.cointracker_android.feature.presentation.util.Screen
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
 
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             CointrackerandroidTheme {
