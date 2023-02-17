@@ -15,4 +15,6 @@ interface CoinRepository {
     suspend fun getFavoriteCoins(): List<CoinDetail>?
 
     suspend fun removeFavoriteCoin(coinId: String): String?
+
+    suspend fun getCurrentPrice(coinId: String): Double?
 }

@@ -2,6 +2,7 @@ package com.example.cointracker_android.di
 
 import android.app.Application
 import androidx.room.Room
+import androidx.work.WorkManager
 import com.example.cointracker_android.feature.data.local.CoinDatabase
 import dagger.Module
 import dagger.Provides
@@ -23,4 +24,7 @@ object AppModule {
         ).build()
     }
 
+    @Provides
+    @Singleton
+    fun provideWorkManager(app: Application) = WorkManager.getInstance(app.applicationContext)
 }
