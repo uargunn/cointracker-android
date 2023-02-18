@@ -12,7 +12,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.capitalize
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -84,17 +86,17 @@ fun FavoriteCoinItem(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(OceanBlue)
+                    .background(MaterialTheme.colors.secondary.copy(alpha = 0.1f))
                     .height(30.dp)
                     .clickable { onDeleteClick.invoke() },
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "DELETE",
+                    text = stringResource(id = R.string.action_delete).uppercase(),
                     modifier = Modifier.wrapContentSize(),
                     style = TextStyle(
-                        color = White,
+                        color = MaterialTheme.colors.secondary,
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Normal
                     )

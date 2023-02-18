@@ -4,7 +4,6 @@ import com.example.cointracker_android.feature.data.remote.dto.CoinDetailDto
 import com.example.cointracker_android.feature.data.remote.dto.CoinDto
 import com.example.cointracker_android.feature.domain.model.Coin
 import com.example.cointracker_android.feature.domain.model.CoinDetail
-import com.example.cointracker_android.util.vo.orZero
 
 class CoinMapper {
     fun map(dto: CoinDto): Coin {
@@ -14,6 +13,7 @@ class CoinMapper {
             id = dto.id.orEmpty()
         )
     }
+
     fun map(dto: CoinDetailDto): CoinDetail {
         return CoinDetail(
             id = dto.id.orEmpty(),

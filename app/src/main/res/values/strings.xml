@@ -3,6 +3,10 @@
     <string name="coin_name">Coin :</string>
     <string name="coin_current_price">Current Price:</string>
     <string name="coin_change_percentage">Percentage Change for 24hr:</string>
-    <string name="sign_up">Sign Up</string>
+    <string name="action_sign_up">Sign Up</string>
     <string name="add_to_favorite">Add to Favorite</string>
+    <string name="search_coin">Search Coin</string>
+    <string name="action_delete">Delete</string>
+    <string name="no_results">No results</string>
+    <string name="sign_up">Sign Up, \n\nBitcoin Price Tracker</string>
 </resources>

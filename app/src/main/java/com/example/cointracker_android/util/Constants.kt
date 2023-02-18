@@ -5,4 +5,8 @@ object Constants {
         const val COLLECTION_USERS = "users"
         const val COLLECTION_FAVORITES = "favorites"
     }
+    object Defaults {
+        const val SWIFT_CODE = "usd"
+        const val CURRENCY_SYMBOL = "$"
+    }
 }

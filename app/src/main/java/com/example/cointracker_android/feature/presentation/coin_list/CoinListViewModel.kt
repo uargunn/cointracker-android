@@ -28,7 +28,7 @@ class CoinListViewModel @Inject constructor(
     val state: State<CoinListState> = _state
 
     init {
-        onSearch("")
+        onSearch(searchQuery.value)
     }
 
     fun onSearch(query: String) {
@@ -40,6 +40,7 @@ class CoinListViewModel @Inject constructor(
                     _state.value = when (result) {
                         is Resource.Loading -> {
                             state.value.copy(
+                                isEmpty = false,
                                 isLoading = true,
                                 coins = emptyList(),
                                 errMessage = ""
@@ -47,17 +48,28 @@ class CoinListViewModel @Inject constructor(
                         }
                         is Resource.Error -> {
                             state.value.copy(
+                                isEmpty = false,
                                 isLoading = false,
                                 coins = emptyList(),
                                 errMessage = result.message.orEmpty()
                             )
                         }
                         is Resource.Success -> {
-                            state.value.copy(
-                                isLoading = false,
-                                coins = result.data.orEmpty(),
-                                errMessage = ""
-                            )
+                            if (result.data.isNullOrEmpty()){
+                                state.value.copy(
+                                    isEmpty = true,
+                                    isLoading = false,
+                                    coins = emptyList(),
+                                    errMessage = ""
+                                )
+                            } else {
+                                state.value.copy(
+                                    isEmpty = false,
+                                    isLoading = false,
+                                    coins = result.data,
+                                    errMessage = ""
+                                )
+                            }
                         }
                     }
                 }.launchIn(viewModelScope)
