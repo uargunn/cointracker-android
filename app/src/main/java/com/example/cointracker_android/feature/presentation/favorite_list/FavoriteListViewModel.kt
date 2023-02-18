@@ -44,7 +44,7 @@ class FavoriteListViewModel @Inject constructor(
                 isLoading = false,
                 isEmpty = true,
                 coins = emptyList(),
-                errMessage = "data not found"
+                errMessage = "No results"
             )
         }
     }

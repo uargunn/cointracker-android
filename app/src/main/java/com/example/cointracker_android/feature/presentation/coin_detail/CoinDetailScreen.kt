@@ -26,6 +26,7 @@ import com.example.cointracker_android.feature.presentation.ui.theme.Primary
 import com.example.cointracker_android.feature.presentation.ui.theme.White
 import com.example.cointracker_android.feature.presentation.util.Screen
 import com.example.cointracker_android.feature.worker.PriceTrackingWorker.Companion.KEY_COIN_PRICE
+import com.example.cointracker_android.util.PriceUtil
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -40,7 +41,7 @@ fun CoinDetailScreen(
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest {  event ->
             when (event) {
-                is CoinDetailViewModel.UiEvent.ShowSnackbar -> {
+                is CoinDetailViewModel.UiEvent.ShowSnackbarAction -> {
                     val result = scaffoldState.snackbarHostState.showSnackbar(
                         message = event.message,
                         actionLabel = "Okay"
@@ -48,6 +49,9 @@ fun CoinDetailScreen(
                     if(result == SnackbarResult.ActionPerformed) {
                         navController.navigate(Screen.FavoriteListScreen.route)
                     }
+                }
+                is CoinDetailViewModel.UiEvent.ShowSnackbar -> {
+                   scaffoldState.snackbarHostState.showSnackbar(message = event.message)
                 }
             }
         }
@@ -127,7 +131,7 @@ fun CoinDetailScreen(
                                         color = Color.DarkGray
                                     )
                                     Text(
-                                        text = priceState.toString(),
+                                        text = PriceUtil.formatDoubleToCurrency(priceState),
                                         style = MaterialTheme.typography.body1,
                                         textAlign = TextAlign.End,
                                         modifier = Modifier.weight(1f),
@@ -148,7 +152,7 @@ fun CoinDetailScreen(
                                         color = Color.DarkGray
                                     )
                                     Text(
-                                        text = coinInfo.priceChangePercentage24h.toString(),
+                                        text = PriceUtil.formatPercentage(coinInfo.priceChangePercentage24h),
                                         style = MaterialTheme.typography.body1,
                                         textAlign = TextAlign.End,
                                         modifier = Modifier.weight(1f),

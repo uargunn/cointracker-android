@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -13,6 +14,9 @@ import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -24,6 +28,7 @@ fun FormTextField(
     onValueChange: (String) -> Unit,
     textStyle: TextStyle = TextStyle(),
     singleLine: Boolean = false,
+    isPassword: Boolean = false,
     onFocusChange: (FocusState) -> Unit
 ) {
     Box(
@@ -38,7 +43,10 @@ fun FormTextField(
                 .fillMaxWidth()
                 .onFocusChanged {
                     onFocusChange(it)
-                }
+                },
+            visualTransformation = if (isPassword.not()) {
+                VisualTransformation.None
+            } else PasswordVisualTransformation()
         )
         if (isHintVisible) {
             Text(

@@ -58,7 +58,7 @@ class CoinDetailViewModel @Inject constructor(
                 viewModelScope.launch {
                     val isSuccess = coinUseCases.addToFavorites(state.value.coinDetail!!)
                     if (isSuccess) {
-                        _eventFlow.emit(UiEvent.ShowSnackbar("Added to Your Favorites"))
+                        _eventFlow.emit(UiEvent.ShowSnackbarAction("Added to Your Favorites!"))
                     }
                     _loadingProgressState.value = false
                 }
@@ -78,6 +78,9 @@ class CoinDetailViewModel @Inject constructor(
                     ExistingPeriodicWorkPolicy.KEEP,
                     workRequest
                 )
+                viewModelScope.launch {
+                    _eventFlow.emit(UiEvent.ShowSnackbar("You will receive a notification when the current price changes!"))
+                }
             }
             is CoinDetailEvent.UpdatePrice -> {
                 _curPrice.value = event.price
@@ -119,6 +122,7 @@ class CoinDetailViewModel @Inject constructor(
     }
 
     sealed class UiEvent {
+        data class ShowSnackbarAction(val message: String) : UiEvent()
         data class ShowSnackbar(val message: String) : UiEvent()
     }
 }

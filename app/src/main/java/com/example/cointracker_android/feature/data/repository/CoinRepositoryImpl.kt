@@ -28,30 +28,31 @@ class CoinRepositoryImpl(
     override fun getCoins(query: String): Flow<Resource<List<Coin>>> = flow {
         emit(Resource.Loading())
 
-        val coins = dao.getCoins(query)
+        var localCoins = dao.getCoins(query)
 
         try {
-            if (coins.isEmpty()) {
+            if (localCoins.isEmpty()) {
                 val remoteCoins = api.getCoins()
                 dao.insertCoins(remoteCoins.map { coinMapper.map(it) })
+                localCoins = dao.getCoins(query)
             }
         } catch (e: HttpException) {
             emit(
                 Resource.Error(
-                    message = ":( Something went wrong!",
-                    data = coins
+                    message = "Ops, something went wrong!",
+                    data = null
                 )
             )
         } catch (e: IOException) {
             emit(
                 Resource.Error(
-                    message = ":( Check your internet connection",
-                    data = coins
+                    message = "Please, check your internet connection!",
+                    data = null
                 )
             )
         }
 
-        emit(Resource.Success(data = dao.getCoins(query)))
+        emit(Resource.Success(data = localCoins))
     }
     override fun getCoinDetailById(id: String): Flow<Resource<List<CoinDetail>>> = flow {
         emit(Resource.Loading())
@@ -60,22 +61,20 @@ class CoinRepositoryImpl(
             val coinDetail = api.getCoinDetail(id)
             emit(
                 Resource.Success(
-                    data = coinDetail.map {
-                        coinMapper.map(it)
-                    }
+                    data = coinDetail.map { coinMapper.map(it) }
                 )
             )
         } catch (e: HttpException) {
             emit(
                 Resource.Error(
-                    message = ":( Something went wrong!",
+                    message = "Ops, something went wrong!",
                     data = null
                 )
             )
         } catch (e: IOException) {
             emit(
                 Resource.Error(
-                    message = ":( Check your internet connection",
+                    message = "Please, check your internet connection!",
                     data = null
                 )
             )
@@ -109,7 +108,11 @@ class CoinRepositoryImpl(
                     val documents = snapshot.documents.mapNotNull {
                         it.toObject(CoinDetail::class.java)
                     }
-                    continuation.resume(documents)
+                    if (documents.isEmpty()) {
+                        continuation.resume(null)
+                    } else {
+                        continuation.resume(documents)
+                    }
                 }
                 .addOnFailureListener {
                     continuation.resume(null)

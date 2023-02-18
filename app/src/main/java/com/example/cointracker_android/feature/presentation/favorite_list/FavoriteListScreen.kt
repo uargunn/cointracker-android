@@ -14,12 +14,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Outline
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.cointracker_android.R
 import com.example.cointracker_android.feature.presentation.favorite_list.component.FavoriteCoinItem
 import com.example.cointracker_android.feature.presentation.ui.common.LoadingDialog
 import com.example.cointracker_android.feature.presentation.ui.common.navbar.BottomNavigationBar
+import com.example.cointracker_android.feature.presentation.ui.theme.Dark
 import com.example.cointracker_android.feature.presentation.ui.theme.White
 import com.example.cointracker_android.feature.presentation.util.Screen
 import kotlinx.coroutines.flow.collectLatest
@@ -103,11 +106,11 @@ fun FavoriteListScreen(
                 )
             }
 
-            if (state.errMessage.isNotBlank()) {
+            if (state.isEmpty) {
                 Text(
-                    text = state.errMessage,
-                    style = MaterialTheme.typography.h6,
-                    color = Color.Red,
+                    text = stringResource(id = R.string.no_results),
+                    color = Dark.copy(.5f),
+                    style = MaterialTheme.typography.body1,
                     modifier = Modifier.align(Alignment.Center)
                 )
             }
