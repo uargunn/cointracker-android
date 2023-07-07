@@ -12,6 +12,7 @@ private val DarkColorPalette = darkColors(
     secondary = OceanBlue
 )
 
+
 private val LightColorPalette = lightColors(
     primary = Primary,
     primaryVariant = Purple700,
