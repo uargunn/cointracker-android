@@ -27,6 +27,7 @@ import com.example.cointracker_android.feature.presentation.ui.theme.Primary
 import com.example.cointracker_android.feature.presentation.ui.theme.White
 import com.example.cointracker_android.feature.presentation.util.Screen
 
+
 @Composable
 fun CoinListScreen(
     navController: NavController,
