@@ -1,7 +1,7 @@
 
 # Bitcoin Price Tracker
 
-Bitcoin Price Tracker is an Android project with Hilt, Coroutines, Flow, Jetpack(Room, ViewModel) on MVVM 
+Bitcoin Price Tracker is an Android project with Hilt, Coroutines, Flow, Jetpack(Room, ViewModel) on MVVM architecture.
 
 ![Logo](https://user-images.githubusercontent.com/123986081/219872952-5d656879-62f2-4bf6-8f1c-3ea7dfd00357.jpg)
 
